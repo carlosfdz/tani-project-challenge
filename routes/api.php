@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\PassportAuthController;
+use App\Http\Controllers\Api\CompaniesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +21,5 @@ use App\Http\Controllers\Auth\PassportAuthController;
 // });
 
 Route::post('login', [PassportAuthController::class, 'login']);
+
+Route::apiResource('companies', CompaniesController::class);

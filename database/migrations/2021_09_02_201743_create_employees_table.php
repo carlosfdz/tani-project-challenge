@@ -20,7 +20,7 @@ class CreateEmployeesTable extends Migration
             $table->string('paternal_surname', 80);
             $table->string('email')->unique();
             $table->string('phone', 10)->nullable();
-            $table->integer('company_id')->unsigned()->index();
+            $table->bigInteger('company_id')->unsigned()->index();
 
             $table->foreign('company_id')->references('id')->on('companies');
 
