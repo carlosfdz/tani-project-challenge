@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Employee;
+use Illuminate\Support\Facades\URL;
 
 class Company extends Model
 {
@@ -31,6 +32,14 @@ class Company extends Model
         'logo',
         'website'
     ];
+
+    /**
+     * Get logo by URL.
+     */
+    public function getLogoAttribute($logo)
+    {
+        return URL('assets/images/uploads/companies/'.$logo);
+    }
 
     /**
      * Get the employees for the companies.

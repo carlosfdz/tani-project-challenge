@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Company;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCompanyRequest;
+use App\Http\Requests\UpdateCompanyRequest;
 
 class CompaniesController extends Controller
 {
@@ -24,9 +26,27 @@ class CompaniesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCompanyRequest $request)
     {
-        //
+        $request['logo'] = $request['logo'] ?? 'logo_default.png';
+
+        // Create company
+        $company = Company::create($request->all());
+
+        if ($request->file('logo')) {
+
+            $logo = $request->file('logo');
+            $extension = $request->file('logo')->getClientOriginalExtension();
+            $logoName = $request['email'] . '.' . $extension;
+            $logo->move(public_path().'/assets/images/uploads/companies', $logoName);
+
+            $company->fill(['logo' => $logoName]);
+            $company->save();
+
+        }
+
+        // Return successful storage
+        return response()->json($company, 201);
     }
 
     /**
@@ -35,9 +55,9 @@ class CompaniesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Company $company)
     {
-        //
+        return $company;
     }
 
     /**
@@ -47,9 +67,11 @@ class CompaniesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCompanyRequest $request, Company $company)
     {
-        //
+        $company->update($request->all());
+
+        return response()->json($company, 200);
     }
 
     /**
@@ -58,8 +80,10 @@ class CompaniesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Company $company)
     {
-        //
+        $company->delete();
+
+        return response()->json(null, 204);
     }
 }
