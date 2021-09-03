@@ -34,18 +34,18 @@ class Company extends Model
     ];
 
     /**
-     * Get logo by URL.
-     */
-    public function getLogoAttribute($logo)
-    {
-        return URL('assets/images/uploads/companies/'.$logo);
-    }
-
-    /**
      * Get the employees for the companies.
      */
     public function employees()
     {
         return $this->hasMany(Employee::class);
+    }
+
+    /**
+     * Get logo by URL.
+     */
+    public function getLogoAttribute($logo)
+    {
+        return URL('assets/images/uploads/companies/'.$logo);
     }
 }

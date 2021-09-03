@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Models\Employee;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreEmployeeRequest;
+use App\Http\Requests\UpdateEmployeeRequest;
 
 class EmployeesController extends Controller
 {
@@ -14,7 +17,7 @@ class EmployeesController extends Controller
      */
     public function index()
     {
-        //
+        return Employee::paginate(10);
     }
 
     /**
@@ -23,9 +26,13 @@ class EmployeesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreEmployeeRequest $request)
     {
-        //
+        // Create employee
+        $employee = Employee::create($request->all());
+
+        // Return successful storage
+        return response()->json($employee, 201);
     }
 
     /**
@@ -34,9 +41,9 @@ class EmployeesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Employee $employee)
     {
-        //
+        return $employee;
     }
 
     /**
@@ -46,9 +53,11 @@ class EmployeesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateEmployeeRequest $request, Employee $employee)
     {
-        //
+        $employee->update($request->all());
+
+        return response()->json($employee, 200);
     }
 
     /**
@@ -57,8 +66,10 @@ class EmployeesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Employee $employee)
     {
-        //
+        $employee->delete();
+
+        return response()->json(null, 204);
     }
 }

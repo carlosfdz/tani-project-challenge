@@ -17,7 +17,7 @@ class CompaniesController extends Controller
      */
     public function index()
     {
-        return Company::all();
+        return Company::paginate(10);
     }
 
     /**
