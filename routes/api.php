@@ -21,8 +21,12 @@ use App\Http\Controllers\Auth\PassportAuthController;
 //     return $request->user();
 // });
 
-Route::post('login', [PassportAuthController::class, 'login']);
+Route::middleware("localization")->group(function () {
+    Route::post('login', [PassportAuthController::class, 'login']);
+});
+
 
 Route::apiResource('companies', CompaniesController::class);
 
 Route::apiResource('employees', EmployeesController::class);
+
